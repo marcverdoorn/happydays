@@ -51,6 +51,7 @@ class AddFriendActivity : AppCompatActivity() {
             val strlen = Fcode.length
             if(strlen == 8){
                 Toast.makeText(baseContext, "Adding friend", Toast.LENGTH_SHORT).show()
+                edit_friends(api_key, Fcode, username)
             }else{
                 Toast.makeText(baseContext, "Invalid code", Toast.LENGTH_SHORT).show()
             }
@@ -86,6 +87,43 @@ class AddFriendActivity : AppCompatActivity() {
             }
         queue.add(stringReq)
     }
+
+    fun edit_friends(apiKey: String, Fcode: String, username: String){
+        var strResp = ""
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://shappie.net/hpdAddFriend.php?username=$username"
+        val requestBody = "accesscode=$apiKey&Fcode=$Fcode"
+
+        val stringReq : StringRequest =
+            object : StringRequest(
+                Method.POST, url,
+                Response.Listener { response ->
+                    strResp = response.toString()
+                    if (strResp == "11" || strResp == "1"){
+                        Toast.makeText(baseContext, "You are now friends!!", Toast.LENGTH_SHORT).show()
+                    }else if (strResp == "00"){
+                        Toast.makeText(baseContext, "You are already friends", Toast.LENGTH_SHORT).show()
+                    }
+                    else if (strResp == "xx" || strResp == "1x" || strResp == "x1" || strResp == "x"){
+                        Toast.makeText(baseContext, "Something went wrong, please try again later", Toast.LENGTH_SHORT).show()
+                    }else if (strResp == "no acces"){
+                        Toast.makeText(baseContext, "Please log in", Toast.LENGTH_SHORT).show()
+                    }else if(strResp == "no match"){
+                        Toast.makeText(baseContext, "Wrong friend code", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                Response.ErrorListener {
+                    Toast.makeText(baseContext, "Check internet connection", Toast.LENGTH_SHORT).show()
+                }
+            ){
+                override fun getBody(): ByteArray{
+                    return requestBody.toByteArray(Charset.defaultCharset())
+                }
+            }
+
+        queue.add(stringReq)
+    }
+
 
     fun generateFriendCode(): String{
         var rancode = ""
