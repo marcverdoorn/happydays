@@ -34,7 +34,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/editTextTextPersonName"
+        android:id="@+id/friendcodeinput"
         android:layout_width="229dp"
         android:layout_height="53dp"
         android:layout_marginTop="228dp"
@@ -51,16 +51,10 @@
         android:layout_width="145dp"
         android:layout_height="55dp"
         android:layout_marginTop="304dp"
+        android:onClick="AddFriend"
         android:text="Add"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        tools:layout_editor_absoluteX="198dp"
-        tools:layout_editor_absoluteY="489dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

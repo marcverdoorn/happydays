@@ -3,6 +3,7 @@ package com.example.tutorialapp
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.android.volley.Response
@@ -18,6 +19,7 @@ class AddFriendActivity : AppCompatActivity() {
     private var time = LocalTime.now().toSecondOfDay()
     private var day = LocalDateTime.now().dayOfYear
     private var last_time = LocalTime.now().toSecondOfDay() - 60
+    private var own_code = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,15 @@ class AddFriendActivity : AppCompatActivity() {
             apireq(username, api_key, "Fcode", code)
         }else{
             Toast.makeText(baseContext, "To soon for new code", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun AddFriend(view: View){
+        val Fcode = findViewById<EditText>(R.id.friendcodeinput).toString()
+        if(Fcode == own_code){
+            Toast.makeText(baseContext, "This is your own code, please enter another code", Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(baseContext, own_code, Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -82,5 +93,6 @@ class AddFriendActivity : AppCompatActivity() {
     fun showFcode(code: String){
         val textView = findViewById<TextView>(R.id.textView2)
         textView.text = code
+        own_code = code
     }
 }
