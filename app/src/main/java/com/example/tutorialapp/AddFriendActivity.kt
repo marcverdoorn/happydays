@@ -44,11 +44,17 @@ class AddFriendActivity : AppCompatActivity() {
     }
 
     fun AddFriend(view: View){
-        val Fcode = findViewById<EditText>(R.id.friendcodeinput).toString()
+        val Fcode = findViewById<EditText>(R.id.friendcodeinput).text.toString()
         if(Fcode == own_code){
             Toast.makeText(baseContext, "This is your own code, please enter another code", Toast.LENGTH_SHORT).show()
         }else{
-            Toast.makeText(baseContext, own_code, Toast.LENGTH_SHORT).show()
+            val strlen = Fcode.length
+            if(strlen == 8){
+                Toast.makeText(baseContext, "Adding friend", Toast.LENGTH_SHORT).show()
+            }else{
+                Toast.makeText(baseContext, "Invalid code", Toast.LENGTH_SHORT).show()
+            }
+
         }
     }
 
