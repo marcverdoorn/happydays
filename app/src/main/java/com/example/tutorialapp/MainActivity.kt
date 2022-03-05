@@ -55,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
         if (loggedin){
             apireq(username, api_key, "score", "scoreview")
+            apireq(username, api_key, "friends", "friendlist")
         }
     }
 
@@ -162,6 +163,9 @@ class MainActivity : AppCompatActivity() {
             textView.text = "Your score is $data"
         }else if (place == "loginstat"){
             val textView = findViewById<TextView>(R.id.textView5)
+            textView.text = data
+        }else if (place == "friendlist"){
+            val textView = findViewById<TextView>(R.id.textView6)
             textView.text = data
         }
     }
