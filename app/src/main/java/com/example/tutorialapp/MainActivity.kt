@@ -166,7 +166,8 @@ class MainActivity : AppCompatActivity() {
             textView.text = data
         }else if (place == "friendlist"){
             val textView = findViewById<TextView>(R.id.textView6)
-            textView.text = data
+            val output = data.replace(";", "\n")
+            textView.text = output
         }
     }
 

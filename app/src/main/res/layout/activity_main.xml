@@ -91,7 +91,8 @@
         android:layout_width="140dp"
         android:layout_height="97dp"
         android:layout_marginStart="60dp"
-        android:layout_marginTop="436dp"
+        android:layout_marginTop="392dp"
+        android:textAlignment="inherit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
