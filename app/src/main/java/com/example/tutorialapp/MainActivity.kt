@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun sendMessage(view: View){
-        val message = "empty"
+        //val message = "empty"
         val intent = Intent(this, DisplayMessageActivity::class.java).apply {
             //putExtra(EXTRA_MESSAGE, message)
         }
@@ -133,6 +133,7 @@ class MainActivity : AppCompatActivity() {
 
         if (loggedin){
             apireq(username, api_key, "score", "scoreview")
+            apireq(username, api_key, "friends", "friendlist")
         }
     }
 

@@ -74,6 +74,8 @@ class DisplayMessageActivity : AppCompatActivity() {
         }else {
             message = "successful login"
             saveKey(apiKey, username)
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
         }
         return message
     }
