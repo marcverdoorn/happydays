@@ -68,6 +68,10 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun start_scoreboard(view: View){
+
+    }
+
     fun apireq(user: String, apiKey: String, cat: String, output_placement: String){
         var strResp = ""
         val queue = Volley.newRequestQueue(this)

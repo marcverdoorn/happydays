@@ -13,6 +13,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tutorialapp">
         <activity
+            android:name=".ScoreBoard"
+            android:exported="false"
+            android:label="@string/title_activity_score_board"
+            android:theme="@style/Theme.Tutorialapp.NoActionBar" />
+        <activity
             android:name=".AddFriendActivity"
             android:exported="false">
             <meta-data
