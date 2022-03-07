@@ -8,8 +8,8 @@
 
     <Button
         android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="160dp"
+        android:layout_height="59dp"
         android:layout_marginTop="368dp"
         android:backgroundTint="@color/purple_200"
         android:onClick="login"
