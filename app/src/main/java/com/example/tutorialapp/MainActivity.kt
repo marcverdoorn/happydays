@@ -26,6 +26,7 @@ import java.nio.charset.Charset
 
 const val EXTRA_user = "com.example.tutorialapp.user"
 const val EXTRA_apikey = "com.example.tutorialapp.apikey"
+const val test = "blyat"
 
 class MainActivity : AppCompatActivity() {
     private val sharedPrefFile = "hpd_api_data"
