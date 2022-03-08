@@ -68,6 +68,11 @@ class MainActivity : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun show_tasks(view: View){
+        val intent = Intent(this, tasks::class.java).apply {  }
+        startActivity(intent)
+    }
+
     fun apireq(user: String, apiKey: String, cat: String, output_placement: String){
         var strResp = ""
         val queue = Volley.newRequestQueue(this)
