@@ -25,6 +25,7 @@
         android:layout_height="59dp"
         android:layout_marginTop="68dp"
         android:onClick="add_task"
+        android:tag="helloworld, slava ukraine"
         android:text="ADD"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"

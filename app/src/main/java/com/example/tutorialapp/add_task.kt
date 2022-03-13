@@ -24,6 +24,8 @@ class add_task : AppCompatActivity() {
     fun add_task(view: View){
         val data = findViewById<EditText>(R.id.editTextTextPersonName).toString()
         save_task(data)
+        val tagdata = view.tag.toString()
+        Toast.makeText(baseContext, tagdata, Toast.LENGTH_LONG).show()
     }
 
     fun save_task(data: String){

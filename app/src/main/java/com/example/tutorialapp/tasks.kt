@@ -11,6 +11,7 @@ import androidx.core.view.marginBottom
 import androidx.core.view.marginTop
 import android.util.TypedValue
 import android.widget.Button
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_tasks.*
 
 class tasks : AppCompatActivity() {
@@ -27,6 +28,10 @@ class tasks : AppCompatActivity() {
         startActivity(intent)
     }
 
+    fun delete_task(task: String){
+        Toast.makeText(baseContext, task, Toast.LENGTH_SHORT).show()
+    }
+
     fun add_task_view(color: Int, text: String){
         val taskview: TextView = TextView(this)
         taskview.textSize = 20f
@@ -41,7 +46,16 @@ class tasks : AppCompatActivity() {
         done.text = "DONE"
         done.width = 120
         done.height = 60
-
         task_layout.addView(done)
+
+        val delete: Button = Button(this)
+        delete.text = "Delete"
+        delete.height = 60
+        delete.tag = color.toString()
+        delete.setOnClickListener(View.OnClickListener {
+            delete_task(color.toString())
+        })
+        task_layout.addView(delete)
+
     }
 }
