@@ -33,6 +33,11 @@ class tasks : AppCompatActivity() {
         Toast.makeText(baseContext, "Deleting task $tasknum", Toast.LENGTH_SHORT).show()
     }
 
+    fun done_task(index: Int){
+        val tasknum = index +1
+        Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
+    }
+
     fun add_task_view(index: Int, text: String){
         val taskview: TextView = TextView(this)
         taskview.textSize = 20f
@@ -60,10 +65,5 @@ class tasks : AppCompatActivity() {
         })
         task_layout.addView(delete)
 
-    }
-
-    fun done_task(index: Int){
-        val tasknum = index +1
-        Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
     }
 }
