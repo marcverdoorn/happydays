@@ -42,8 +42,7 @@ class add_task : AppCompatActivity() {
 
     fun get_tasks(): String{
         try {
-            val path = context.getFilesDir()
-            val tasks = File(path, "tasks.txt").readBytes().toString()
+            val tasks = File("tasks.txt").readBytes().toString()
 
             return tasks
         }catch (e: Exception){

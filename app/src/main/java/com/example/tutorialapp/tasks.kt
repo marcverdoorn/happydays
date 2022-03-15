@@ -28,34 +28,42 @@ class tasks : AppCompatActivity() {
         startActivity(intent)
     }
 
-    fun delete_task(task: String){
-        Toast.makeText(baseContext, task, Toast.LENGTH_SHORT).show()
+    fun delete_task(index: Int){
+        val tasknum = index +1
+        Toast.makeText(baseContext, "Deleting task $tasknum", Toast.LENGTH_SHORT).show()
     }
 
-    fun add_task_view(color: Int, text: String){
+    fun add_task_view(index: Int, text: String){
         val taskview: TextView = TextView(this)
         taskview.textSize = 20f
         taskview.text = text
         taskview.textAlignment = View.TEXT_ALIGNMENT_CENTER
         taskview.setPadding(10,50,10,50)
-
-        taskview.setBackgroundColor(Color.rgb(230-color*5, 19+color*3, color*6))
+        taskview.setBackgroundColor(Color.rgb(230-index*5, 19+index*3, index*6))
         task_layout.addView(taskview)
 
         val done: Button = Button(this)
         done.text = "DONE"
         done.width = 120
         done.height = 60
+        done.setOnClickListener(View.OnClickListener {
+            done_task(index)
+        })
         task_layout.addView(done)
 
         val delete: Button = Button(this)
         delete.text = "Delete"
         delete.height = 60
-        delete.tag = color.toString()
+        delete.tag = index.toString()
         delete.setOnClickListener(View.OnClickListener {
-            delete_task(color.toString())
+            delete_task(index)
         })
         task_layout.addView(delete)
 
+    }
+
+    fun done_task(index: Int){
+        val tasknum = index +1
+        Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
     }
 }
