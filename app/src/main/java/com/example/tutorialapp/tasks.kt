@@ -13,13 +13,20 @@ import android.util.TypedValue
 import android.widget.Button
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_tasks.*
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.lang.Exception
+import java.lang.StringBuilder
 
 class tasks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tasks)
-        for (i in (0..30)){
-            add_task_view(i, "throw out the garbage")
+        val tasks = get_task_list()
+        if (tasks != null){
+            for(i in tasks){
+                add_task_view(tasks.lastIndexOf(i), i)
+            }
         }
     }
 
@@ -36,6 +43,27 @@ class tasks : AppCompatActivity() {
     fun done_task(index: Int){
         val tasknum = index +1
         Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
+    }
+
+    fun get_task_list():List<String>?{
+        try {
+            val file = openFileInput("tasks.txt")
+            val inputStreamReader : InputStreamReader = InputStreamReader(file)
+            val bufferedReader: BufferedReader = BufferedReader(inputStreamReader)
+            val stringBuilder: StringBuilder = StringBuilder()
+            var text: String? = null
+
+            while ({text = bufferedReader.readLine(); text}() != null){
+                stringBuilder.append(text)
+            }
+            val tasks = stringBuilder.toString()
+            val list = tasks.split(";")
+            return list.dropLast(1)
+        }catch (e: Exception){
+            Toast.makeText(baseContext, "No tasks yet", Toast.LENGTH_LONG).show()
+            return null
+        }
+
     }
 
     fun add_task_view(index: Int, text: String){
