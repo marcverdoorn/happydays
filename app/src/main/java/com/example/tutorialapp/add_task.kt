@@ -28,7 +28,9 @@ class add_task : AppCompatActivity() {
 
     fun add_task(view: View){
         val data = findViewById<EditText>(R.id.editTextTextPersonName).text.toString()
-        save_task(data)
+        if (data != null){
+            save_task(data)
+        }
     }
 
     fun save_task(data: String){

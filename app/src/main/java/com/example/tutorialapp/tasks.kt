@@ -1,7 +1,9 @@
 package com.example.tutorialapp
 
 import android.app.ActionBar
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,15 +16,18 @@ import android.widget.Button
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_tasks.*
 import java.io.BufferedReader
+import java.io.FileOutputStream
 import java.io.InputStreamReader
 import java.lang.Exception
 import java.lang.StringBuilder
 
 class tasks : AppCompatActivity() {
+    private val sharedPrefFile = "hpd_api_data"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tasks)
-        val tasks = get_task_list()
+        var tasks = get_task_list()
         if (tasks != null){
             for(i in tasks){
                 add_task_view(tasks.lastIndexOf(i), i)
@@ -38,11 +43,25 @@ class tasks : AppCompatActivity() {
     fun delete_task(index: Int){
         val tasknum = index +1
         Toast.makeText(baseContext, "Deleting task $tasknum", Toast.LENGTH_SHORT).show()
+        val tasks = get_task_list()
+        var list = tasks?.toMutableList()
+        if (list != null){
+            list.removeAt(index)
+            val stringBuilder: StringBuilder = StringBuilder()
+            for (i in list){
+                stringBuilder.append(i + ';')
+            }
+            save(stringBuilder.toString())
+        }
     }
 
     fun done_task(index: Int){
         val tasknum = index +1
         Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
+        delete_task(index)
+        val score = get_saved_data("score").toInt() + 1
+        save_data("score", score.toString())
+
     }
 
     fun get_task_list():List<String>?{
@@ -93,5 +112,30 @@ class tasks : AppCompatActivity() {
         })
         task_layout.addView(delete)
 
+    }
+
+    fun save(data: String){
+        try {
+            val fos: FileOutputStream = openFileOutput("tasks.txt", Context.MODE_PRIVATE)
+            fos.write(data.toByteArray())
+            fos.close()
+            //Toast.makeText(baseContext, "saving done", Toast.LENGTH_SHORT).show()
+        }catch (e: Exception){
+            Toast.makeText(baseContext, "saving task failed", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun save_data(datacategory: String, data: String){
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = sharedPreferences.edit()
+        editor.putString(datacategory, data)
+        editor.apply()
+        editor.commit()
+    }
+
+    fun get_saved_data(datacategory: String): String{
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        val requested_data = sharedPreferences.getString(datacategory, "default").toString()
+        return requested_data
     }
 }
