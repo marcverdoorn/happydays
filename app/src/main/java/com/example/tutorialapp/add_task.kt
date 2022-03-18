@@ -8,9 +8,9 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
-import java.io.File
-import java.io.OutputStreamWriter
+import java.io.*
 import java.lang.Exception
+import java.lang.StringBuilder
 
 class add_task : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +22,7 @@ class add_task : AppCompatActivity() {
     }
 
     fun add_task(view: View){
-        val data = findViewById<EditText>(R.id.editTextTextPersonName).toString()
+        val data = findViewById<EditText>(R.id.editTextTextPersonName).text.toString()
         save_task(data)
         val tagdata = view.tag.toString()
         Toast.makeText(baseContext, tagdata, Toast.LENGTH_LONG).show()
@@ -30,7 +30,7 @@ class add_task : AppCompatActivity() {
 
     fun save_task(data: String){
         try {
-            val fos = openFileOutput("tasks.txt", Context.MODE_APPEND)
+            val fos: FileOutputStream = openFileOutput("tasks.txt", Context.MODE_PRIVATE)
             fos.write(data.toByteArray())
             fos.close()
             Toast.makeText(baseContext, "saving done", Toast.LENGTH_SHORT).show()
@@ -42,8 +42,16 @@ class add_task : AppCompatActivity() {
 
     fun get_tasks(): String{
         try {
-            val tasks = File("tasks.txt").readBytes().toString()
+            val file = openFileInput("tasks.txt")
+            val inputStreamReader : InputStreamReader = InputStreamReader(file)
+            val bufferedReader: BufferedReader = BufferedReader(inputStreamReader)
+            val stringBuilder: StringBuilder = StringBuilder()
+            var text: String? = null
 
+            while ({text = bufferedReader.readLine(); text}() != null){
+                stringBuilder.append(text)
+            }
+            val tasks = stringBuilder.toString()
             return tasks
         }catch (e: Exception){
             Toast.makeText(baseContext, e.toString(), Toast.LENGTH_LONG).show()
