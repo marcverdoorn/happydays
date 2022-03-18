@@ -18,7 +18,12 @@ class add_task : AppCompatActivity() {
         setContentView(R.layout.activity_add_task)
         val tasks = get_tasks()
         val textView = findViewById<TextView>(R.id.textView7)
-        textView.text = tasks
+        val stringBuilder:StringBuilder = StringBuilder()
+        val tasklist = convert_to_array(tasks)
+        for(i in tasklist){
+            stringBuilder.append(i + "\n")
+        }
+        textView.text = stringBuilder
     }
 
     fun add_task(view: View){
@@ -62,5 +67,10 @@ class add_task : AppCompatActivity() {
             Toast.makeText(baseContext, e.toString(), Toast.LENGTH_LONG).show()
             return ""
         }
+    }
+
+    fun convert_to_array(data: String): List<String>{
+        val list = data.split(";")
+        return list
     }
 }
