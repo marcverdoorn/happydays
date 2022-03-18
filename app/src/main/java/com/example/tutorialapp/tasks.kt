@@ -42,7 +42,7 @@ class tasks : AppCompatActivity() {
 
     fun delete_task(index: Int){
         val tasknum = index +1
-        Toast.makeText(baseContext, "Deleting task $tasknum", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(baseContext, "Deleting task $tasknum", Toast.LENGTH_SHORT).show()
         val tasks = get_task_list()
         var list = tasks?.toMutableList()
         if (list != null){
@@ -57,11 +57,10 @@ class tasks : AppCompatActivity() {
 
     fun done_task(index: Int){
         val tasknum = index +1
-        Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
         delete_task(index)
         val score = get_saved_data("score").toInt() + 1
         save_data("score", score.toString())
-
     }
 
     fun get_task_list():List<String>?{
