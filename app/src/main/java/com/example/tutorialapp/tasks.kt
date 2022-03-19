@@ -107,15 +107,14 @@ class tasks : AppCompatActivity() {
         done.setOnClickListener(View.OnClickListener {
             try{
                 done_task(index)
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
+                finish()
+                overridePendingTransition(0, 0)
+                startActivity(getIntent())
+                overridePendingTransition(0, 0)
             }
             catch (e: Exception){
                 Toast.makeText(baseContext, e.toString(), Toast.LENGTH_LONG).show()
             }
-
         })
         task_layout.addView(done)
 
@@ -125,10 +124,10 @@ class tasks : AppCompatActivity() {
         delete.setOnClickListener(View.OnClickListener {
             try {
                 delete_task(index)
-                finish();
-                overridePendingTransition(0, 0);
-                startActivity(getIntent());
-                overridePendingTransition(0, 0);
+                finish()
+                overridePendingTransition(0, 0)
+                startActivity(getIntent())
+                overridePendingTransition(0, 0)
             }
             catch (e: Exception){
                 Toast.makeText(baseContext, e.toString(), Toast.LENGTH_LONG).show()
