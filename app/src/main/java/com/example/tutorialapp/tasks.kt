@@ -14,12 +14,16 @@ import androidx.core.view.marginTop
 import android.util.TypedValue
 import android.widget.Button
 import android.widget.Toast
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import kotlinx.android.synthetic.main.activity_tasks.*
 import java.io.BufferedReader
 import java.io.FileOutputStream
 import java.io.InputStreamReader
 import java.lang.Exception
 import java.lang.StringBuilder
+import java.nio.charset.Charset
 
 class tasks : AppCompatActivity() {
     private val sharedPrefFile = "hpd_api_data"
@@ -27,7 +31,7 @@ class tasks : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_tasks)
-        var tasks = get_task_list()
+        val tasks = get_task_list()
         if (tasks != null){
             for(i in tasks){
                 add_task_view(tasks.lastIndexOf(i), i)
@@ -56,11 +60,12 @@ class tasks : AppCompatActivity() {
     }
 
     fun done_task(index: Int){
-        val tasknum = index +1
-        //Toast.makeText(baseContext, "Finished task $tasknum", Toast.LENGTH_SHORT).show()
         delete_task(index)
         val score = get_saved_data("score").toInt() + 1
+        val api_key = get_saved_data("api_key")
+        val username = get_saved_data("username")
         save_data("score", score.toString())
+        apireq(username, api_key, "score", score.toString())
     }
 
     fun get_task_list():List<String>?{
@@ -90,24 +95,44 @@ class tasks : AppCompatActivity() {
         taskview.text = text
         taskview.textAlignment = View.TEXT_ALIGNMENT_CENTER
         taskview.setPadding(10,50,10,50)
-        taskview.setBackgroundColor(Color.rgb(230-index*5, 19+index*3, index*6))
+        taskview.setBackgroundColor(Color.rgb(index*6, 19+index*3, 230-index*5 ))
         task_layout.addView(taskview)
 
         val done: Button = Button(this)
+        val delete: Button = Button(this)
+
         done.text = "DONE"
         done.width = 120
         done.height = 60
         done.setOnClickListener(View.OnClickListener {
-            done_task(index)
+            try{
+                done_task(index)
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+            }
+            catch (e: Exception){
+                Toast.makeText(baseContext, e.toString(), Toast.LENGTH_LONG).show()
+            }
+
         })
         task_layout.addView(done)
 
-        val delete: Button = Button(this)
         delete.text = "Delete"
         delete.height = 60
         delete.tag = index.toString()
         delete.setOnClickListener(View.OnClickListener {
-            delete_task(index)
+            try {
+                delete_task(index)
+                finish();
+                overridePendingTransition(0, 0);
+                startActivity(getIntent());
+                overridePendingTransition(0, 0);
+            }
+            catch (e: Exception){
+                Toast.makeText(baseContext, e.toString(), Toast.LENGTH_LONG).show()
+            }
         })
         task_layout.addView(delete)
 
@@ -136,5 +161,31 @@ class tasks : AppCompatActivity() {
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         val requested_data = sharedPreferences.getString(datacategory, "default").toString()
         return requested_data
+    }
+
+    fun apireq(user: String, apiKey: String, cat: String, data: String){
+        var strResp = ""
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://shappie.net/hpdChangeInfo.php?username=$user&val=$data&cat=$cat"
+        val requestBody = "accesscode=$apiKey"
+        val stringReq : StringRequest =
+            object : StringRequest(
+                Method.POST, url,
+                Response.Listener { response ->
+                    strResp = response.toString()
+                    if(strResp == "no data" || strResp == "error"){
+                        Toast.makeText(baseContext, "Something went wrong. Please log in!", Toast.LENGTH_LONG).show()
+                    }else if(strResp == "done" && cat == "Fcode"){
+                        Toast.makeText(baseContext, "Code ready for use", Toast.LENGTH_LONG).show()
+                    }
+                },
+                Response.ErrorListener { error ->
+                    Toast.makeText(baseContext, "Something went wrong. Please check internet connection", Toast.LENGTH_LONG).show()
+                }){
+                override fun getBody(): ByteArray {
+                    return requestBody.toByteArray(Charset.defaultCharset())
+                }
+            }
+        queue.add(stringReq)
     }
 }

@@ -27,10 +27,13 @@ class add_task : AppCompatActivity() {
     }
 
     fun add_task(view: View){
-        val data = findViewById<EditText>(R.id.editTextTextPersonName).text.toString()
-        if (data != null){
+        val editText = findViewById<EditText>(R.id.editTextTextPersonName)
+        val data = editText.text.toString()
+        editText.setText("")
+        if (data.trim().length > 0 && !data.contains(";")){
             save_task(data)
         }
+
     }
 
     fun save_task(data: String){
@@ -45,7 +48,7 @@ class add_task : AppCompatActivity() {
             val fos: FileOutputStream = openFileOutput("tasks.txt", Context.MODE_PRIVATE)
             fos.write(new_tasks.toByteArray())
             fos.close()
-            Toast.makeText(baseContext, "saving done", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(baseContext, "saving done", Toast.LENGTH_SHORT).show()
         }catch (e: Exception){
             Toast.makeText(baseContext, "saving task failed", Toast.LENGTH_SHORT).show()
         }
@@ -66,7 +69,6 @@ class add_task : AppCompatActivity() {
             val tasks = stringBuilder.toString()
             return tasks
         }catch (e: Exception){
-            Toast.makeText(baseContext, e.toString(), Toast.LENGTH_LONG).show()
             return ""
         }
     }
