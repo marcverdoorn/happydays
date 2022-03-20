@@ -2,26 +2,24 @@
 
 package com.example.tutorialapp
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import com.android.volley.Request
+import androidx.appcompat.app.AppCompatActivity
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import java.io.File
 import java.io.InputStream
-import java.lang.Exception
-import android.content.SharedPreferences
+import java.net.URL
+import java.net.URLConnection
 import java.nio.charset.Charset
-
+import java.security.cert.CertificateException
+import java.security.cert.X509Certificate
 
 
 const val EXTRA_user = "com.example.tutorialapp.user"
@@ -40,6 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             get_api_config()
+
         }catch (e: Exception){
             Toast.makeText(baseContext, "Oops something went wrong, try to log in", Toast.LENGTH_LONG).show()
         }
@@ -75,6 +74,7 @@ class MainActivity : AppCompatActivity() {
 
     fun apireq(user: String, apiKey: String, cat: String, output_placement: String){
         var strResp = ""
+
         val queue = Volley.newRequestQueue(this)
         val url = "https://shappie.net/hpdGetInfo.php?username=$user&val=$cat"
         val requestBody = "accesscode=$apiKey"
@@ -113,6 +113,14 @@ class MainActivity : AppCompatActivity() {
             }
         queue.add(stringReq)
     }
+
+    fun test_ssl(): String{
+        val url = URL("https://wikipedia.org")
+        val urlConnection: URLConnection = url.openConnection()
+        val inputStream: InputStream = urlConnection.getInputStream()
+        return inputStream.read().toString()
+    }
+
 
     fun newaccount(view: View){
         val openURL = Intent(android.content.Intent.ACTION_VIEW)
