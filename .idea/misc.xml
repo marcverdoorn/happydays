@@ -9,6 +9,7 @@
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/activity_display_message.xml" value="0.3625" />
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/activity_score_board.xml" value="0.25" />
+
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/activity_tasks.xml" value="0.264" />
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/content_scrolling.xml" value="0.25" />
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/content_tasks.xml" value="0.31068840579710144" />
@@ -16,6 +17,7 @@
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/fragment_second.xml" value="0.31068840579710144" />
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/main_fragment.xml" value="0.31068840579710144" />
         <entry key="..\:/Users/marcv/AndroidStudioProjects/tutorialapp/app/src/main/res/layout/tasks_activity.xml" value="0.31068840579710144" />
+
       </map>
     </option>
   </component>
