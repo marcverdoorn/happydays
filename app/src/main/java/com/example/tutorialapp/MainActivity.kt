@@ -20,6 +20,9 @@ import java.net.URLConnection
 import java.nio.charset.Charset
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.util.*
 
 
 const val EXTRA_user = "com.example.tutorialapp.user"
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
         try {
             get_api_config()
-
+            score_reset()
         }catch (e: Exception){
             Toast.makeText(baseContext, "Oops something went wrong, try to log in", Toast.LENGTH_LONG).show()
         }
@@ -133,6 +136,7 @@ class MainActivity : AppCompatActivity() {
     fun refresh(view: View){
         try {
             get_api_config()
+            score_reset()
         }catch (e: Exception){
             Toast.makeText(baseContext, "Oops something went wrong, try to log in", Toast.LENGTH_LONG).show()
         }
@@ -200,5 +204,56 @@ class MainActivity : AppCompatActivity() {
         editor.putString(datacategory, data)
         editor.apply()
         editor.commit()
+    }
+
+    fun score_reset(){
+        val week = Calendar.getInstance(TimeZone.getTimeZone("UTC+1")).get(Calendar.WEEK_OF_YEAR)
+        val year = Calendar.getInstance(TimeZone.getTimeZone("UTC+1")).get(Calendar.YEAR)
+        val stored_week = get_saved_data("week")
+        val stored_year = get_saved_data("year")
+        if (stored_week == "default"){
+            save_data("week", week.toString())
+        }
+        if (stored_year == "default"){
+            save_data("year", week.toString())
+        }
+        if (stored_week != "default" && stored_year != "default"){
+            if (week - stored_week.toInt() > 0 && year - stored_year.toInt() == 0){
+                reset_score_database(username, api_key, "score", "0", year, week, false)
+            }else if (week - stored_week.toInt() < 0 || year - stored_year.toInt() > 0){
+                reset_score_database(username, api_key, "score", "0", year, week, true)
+            }
+        }else{
+            Toast.makeText(baseContext, "data not found",Toast.LENGTH_LONG).show()
+        }
+    }
+
+    fun reset_score_database(user: String, apiKey: String, cat: String, data: String, year: Int, week: Int, Y_reset: Boolean){
+        var strResp = ""
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://shappie.net/hpdChangeInfo.php?username=$user&val=$data&cat=$cat"
+        val requestBody = "accesscode=$apiKey"
+        val stringReq : StringRequest =
+            object : StringRequest(
+                Method.POST, url,
+                Response.Listener { response ->
+                    strResp = response.toString()
+                    if(strResp == "no data" || strResp == "error"){
+                        Toast.makeText(baseContext, "Something went wrong. Please log in!", Toast.LENGTH_LONG).show()
+                    }else if (Y_reset){
+                        save_data("week", week.toString())
+                        save_data("year", year.toString())
+                    }else{
+                        save_data("week", week.toString())
+                    }
+                },
+                Response.ErrorListener { error ->
+                    Toast.makeText(baseContext, "Please connect to internet to update score", Toast.LENGTH_LONG).show()
+                }){
+                override fun getBody(): ByteArray {
+                    return requestBody.toByteArray(Charset.defaultCharset())
+                }
+            }
+        queue.add(stringReq)
     }
 }
