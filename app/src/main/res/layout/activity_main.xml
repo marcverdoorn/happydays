@@ -26,8 +26,8 @@
         android:id="@+id/textView"
         android:layout_width="142dp"
         android:layout_height="58dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="336dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginTop="200dp"
         android:textAlignment="inherit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -89,12 +89,12 @@
 
     <TextView
         android:id="@+id/textView6"
-        android:layout_width="141dp"
+        android:layout_width="134dp"
 
-        android:layout_height="264dp"
-        android:layout_marginStart="32dp"
+        android:layout_height="443dp"
+        android:layout_marginStart="28dp"
 
-        android:layout_marginTop="392dp"
+        android:layout_marginTop="268dp"
         android:textAlignment="inherit"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
