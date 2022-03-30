@@ -173,7 +173,7 @@ class MainActivity : AppCompatActivity() {
 
         if (loggedin){
             apireq(username, api_key, "score", "scoreview")
-            apireq(username, api_key, "friends", "friendlist")
+            get_friendscores(username, api_key)
         }
     }
 
