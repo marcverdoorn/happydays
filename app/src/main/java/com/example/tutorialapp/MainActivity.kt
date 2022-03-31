@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
         if (loggedin){
             apireq(username, api_key, "score", "scoreview")
-            //apireq(username, api_key, "friends", "friendlist")
             get_friendscores(username, api_key)
         }
     }
@@ -75,7 +74,16 @@ class MainActivity : AppCompatActivity() {
     fun show_tasks(view: View){
         val intent = Intent(this, tasks::class.java).apply {  }
         startActivity(intent)
+    }
 
+    fun update_score(score: Int){
+        val stored_score = get_saved_data("score")
+        if (stored_score.toInt() > score){
+            update_db(username, api_key, "score", stored_score)
+            place_data_ouput("scoreview", stored_score)
+        }else{
+            save_data("score", score.toString())
+        }
     }
 
     fun apireq(user: String, apiKey: String, cat: String, output_placement: String){
@@ -100,7 +108,8 @@ class MainActivity : AppCompatActivity() {
                         loggedin = true
                         place_data_ouput("loginstat", "You're logged in")
                         place_data_ouput(output_placement, strResp)
-                        if (cat == "score" || cat == "pref"){
+                        if (cat == "score"){
+                            update_score(strResp.toInt())
                             save_data(cat, strResp)
                         }
                     }
@@ -263,12 +272,38 @@ class MainActivity : AppCompatActivity() {
                     }else if (Y_reset){
                         save_data("week", week.toString())
                         save_data("year", year.toString())
+                        save_data("score", "0")
                     }else{
                         save_data("week", week.toString())
+                        save_data("score", "0")
                     }
                 },
                 Response.ErrorListener { error ->
                     Toast.makeText(baseContext, "Please connect to internet to update score", Toast.LENGTH_LONG).show()
+                }){
+                override fun getBody(): ByteArray {
+                    return requestBody.toByteArray(Charset.defaultCharset())
+                }
+            }
+        queue.add(stringReq)
+    }
+
+    fun update_db(user: String, apiKey: String, cat: String, data: String){
+        var strResp = ""
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://shappie.net/hpdChangeInfo.php?username=$user&val=$data&cat=$cat"
+        val requestBody = "accesscode=$apiKey"
+        val stringReq : StringRequest =
+            object : StringRequest(
+                Method.POST, url,
+                Response.Listener { response ->
+                    strResp = response.toString()
+                    if(strResp == "no data" || strResp == "error"){
+                        Toast.makeText(baseContext, "Something went wrong. Please log in!", Toast.LENGTH_LONG).show()
+                    }
+                },
+                Response.ErrorListener { error ->
+                    Toast.makeText(baseContext, "Something went wrong. Please check internet connection", Toast.LENGTH_LONG).show()
                 }){
                 override fun getBody(): ByteArray {
                     return requestBody.toByteArray(Charset.defaultCharset())
