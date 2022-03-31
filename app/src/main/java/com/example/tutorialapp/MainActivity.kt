@@ -88,7 +88,6 @@ class MainActivity : AppCompatActivity() {
 
     fun apireq(user: String, apiKey: String, cat: String, output_placement: String){
         var strResp = ""
-
         val queue = Volley.newRequestQueue(this)
         val url = "https://shappie.net/hpdGetInfo.php?username=$user&val=$cat"
         val requestBody = "accesscode=$apiKey"
