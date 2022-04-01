@@ -44,12 +44,12 @@ class DisplayMessageActivity : AppCompatActivity() {
         val stringReq : StringRequest=
             object : StringRequest(Method.POST, url,
                 Response.Listener { response ->
-                    var strResp = response.toString()
+                    val strResp = response.toString()
                     textView.text = react(strResp, username)
                     apikey = strResp
                 },
             Response.ErrorListener { error ->
-                    var strResp = "no connection"
+                    val strResp = "no connection"
                     textView.text = strResp
             }){
                 override fun getBody(): ByteArray {
@@ -85,6 +85,7 @@ class DisplayMessageActivity : AppCompatActivity() {
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
         editor.putString("api_key", api_key)
         editor.putString("username", username)
+        editor.putString("score", "0")
         editor.apply()
         editor.commit()
     }
