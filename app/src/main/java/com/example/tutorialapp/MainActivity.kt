@@ -72,7 +72,12 @@ class MainActivity : AppCompatActivity() {
 
 
     fun show_tasks(view: View){
-        val intent = Intent(this, tasks::class.java).apply {  }
+        val intent = Intent(this, tasks::class.java)
+        startActivity(intent)
+    }
+
+    fun score_board(view: View){
+        val intent = Intent(this, scoreboard::class.java)
         startActivity(intent)
     }
 
@@ -203,7 +208,6 @@ class MainActivity : AppCompatActivity() {
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         api_key = sharedPreferences.getString("api_key","default").toString()
         username = sharedPreferences.getString("username","default").toString()
-        //Toast.makeText(baseContext, "key $api_key name $username", Toast.LENGTH_SHORT).show()
     }
 
     fun place_data_ouput(place: String, data: String){

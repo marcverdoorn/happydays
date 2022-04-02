@@ -13,7 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tutorialapp">
         <activity
+            android:name=".scoreboard"
+            android:exported="false"
+            android:label="Scoreboard">
 
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".MainActivity"/>
+        </activity>
+        <activity
             android:name=".add_task"
             android:exported="false"
             android:label="Add Task">
@@ -29,7 +37,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".MainActivity" />
         </activity>
-
         <activity
             android:name=".AddFriendActivity"
             android:exported="false"

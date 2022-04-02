@@ -40,7 +40,7 @@ class tasks : AppCompatActivity() {
     }
 
     fun add_task(view: View){
-        val intent = Intent(this, add_task::class.java).apply {  }
+        val intent = Intent(this, add_task::class.java)
         startActivity(intent)
     }
 
