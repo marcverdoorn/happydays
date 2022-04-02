@@ -29,6 +29,9 @@ class scoreboard : AppCompatActivity() {
         setContentView(R.layout.activity_scoreboard)
         get_api_config()
         get_friendscores(username, api_key)
+
+        val textView = findViewById<TextView>(R.id.textView8)
+        textView.text = "Your score: ${get_saved_data("score")}"
     }
 
     fun add_score_view(color: rgb, data: contender){
