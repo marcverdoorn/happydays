@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
 
         if (loggedin){
             apireq(username, api_key, "score", "scoreview")
-            get_friendscores(username, api_key)
         }
     }
 
@@ -133,32 +132,6 @@ class MainActivity : AppCompatActivity() {
         queue.add(stringReq)
     }
 
-    fun get_friendscores(username: String, api_key: String){
-
-        val queue = Volley.newRequestQueue(this)
-        val url = "https://shappie.net/hpdFriendScore.php?username=$username"
-        val requestBody = "accesscode=$api_key"
-        val stringReq : StringRequest=
-            object : StringRequest(Method.POST, url,
-                Response.Listener { response ->
-                    val strResp = response.toString()
-                    if(strResp == "no data"){
-                        Toast.makeText(baseContext, "Please log in!", Toast.LENGTH_LONG).show()
-                    }else{
-                        place_data_ouput("friendlist", strResp)
-                    }
-                },
-                Response.ErrorListener { error ->
-                    val strResp = "0"
-                    place_data_ouput("loginstat", "Check internet connection")
-                }){
-                override fun getBody(): ByteArray {
-                    return requestBody.toByteArray(Charset.defaultCharset())
-                }
-            }
-        queue.add(stringReq)
-    }
-
 
     fun newaccount(view: View){
         val openURL = Intent(android.content.Intent.ACTION_VIEW)
@@ -186,7 +159,6 @@ class MainActivity : AppCompatActivity() {
 
         if (loggedin){
             apireq(username, api_key, "score", "scoreview")
-            get_friendscores(username, api_key)
         }
     }
 

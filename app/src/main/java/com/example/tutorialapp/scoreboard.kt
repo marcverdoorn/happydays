@@ -17,11 +17,12 @@ import java.lang.Exception
 import java.nio.charset.Charset
 
 data class contender(val name: String, val score: Int){}
+data class rgb(val red: Int, val green: Int, val blue: Int){}
 
 class scoreboard : AppCompatActivity() {
     private val sharedPrefFile = "hpd_api_data"
-    private var api_key: String = ""
     private var username: String = ""
+    private var api_key: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,13 +31,13 @@ class scoreboard : AppCompatActivity() {
         get_friendscores(username, api_key)
     }
 
-    fun add_score_view(index: Int, data: contender){
+    fun add_score_view(color: rgb, data: contender){
         val taskview: TextView = TextView(this)
         taskview.textSize = 20f
         taskview.text = "${data.name} has ${data.score} points"
         taskview.textAlignment = View.TEXT_ALIGNMENT_CENTER
         taskview.setPadding(10,50,10,50)
-        taskview.setBackgroundColor(Color.rgb(index*6, 19+index*3, 230-index*5 ))
+        taskview.setBackgroundColor(Color.rgb(color.red, color.green, color.blue ))
         task_layout.addView(taskview)
     }
 
@@ -74,10 +75,17 @@ class scoreboard : AppCompatActivity() {
             contenders.add(contender(raw_list[i], raw_list[i+1].toInt()))
             i += 2
         }
+        contenders.add(contender(username, get_saved_data("score").toInt()))
         contenders.sortByDescending { it.score }
         var x = 0
-        while (x < (contenders.size - 1)){
-            add_score_view(x, contenders[x])
+        val green = rgb(47, 212, 99)
+        val red = rgb(212, 47, 47)
+        while (x < (contenders.size - 0)){
+            add_score_view(rgb(
+                (green.red + (red.red-green.red)/contenders.size * x),
+                (green.green + (red.green-green.green)/contenders.size * x),
+                (green.blue + (red.blue-green.blue)/contenders.size * x)
+            ), contenders[x])
             x++
         }
     }
@@ -86,5 +94,11 @@ class scoreboard : AppCompatActivity() {
         val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
         api_key = sharedPreferences.getString("api_key","default").toString()
         username = sharedPreferences.getString("username","default").toString()
+    }
+
+    fun get_saved_data(datacategory: String): String{
+        val sharedPreferences: SharedPreferences = this.getSharedPreferences(sharedPrefFile, Context.MODE_PRIVATE)
+        val requested_data = sharedPreferences.getString(datacategory, "default").toString()
+        return requested_data
     }
 }
