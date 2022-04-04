@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -28,7 +29,11 @@ class scoreboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scoreboard)
         get_api_config()
-        get_friendscores(username, api_key)
+        try {
+            get_friendscores(username, api_key)
+        }catch (e: Exception){
+            Toast.makeText(baseContext, "Oops something went wrong", Toast.LENGTH_SHORT).show()
+        }
 
         val textView = findViewById<TextView>(R.id.textView8)
         textView.text = "Your score: ${get_saved_data("score")}"
@@ -41,7 +46,31 @@ class scoreboard : AppCompatActivity() {
         taskview.textAlignment = View.TEXT_ALIGNMENT_CENTER
         taskview.setPadding(10,50,10,50)
         taskview.setBackgroundColor(Color.rgb(color.red, color.green, color.blue ))
+        taskview.setOnClickListener(View.OnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Delete friend")
+            builder.setMessage("Do you want to delete ${data.name}?")
+            builder.setPositiveButton("YES"){
+                dialogInterface, which ->
+                Toast.makeText(baseContext, "Deleting ${data.name}", Toast.LENGTH_SHORT).show()
+                try{
+                    delete_friend(data.name)
+                }catch (e: Exception){
+                    Toast.makeText(baseContext, "Deleting failed", Toast.LENGTH_SHORT).show()
+                }
+            }
+            builder.setNegativeButton("NO"){
+                dialogInterface, which ->
+                Toast.makeText(baseContext, "${data.name} thanks you!", Toast.LENGTH_SHORT).show()
+            }
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.show()
+        })
         task_layout.addView(taskview)
+        val spaceview: TextView = TextView(this)
+        spaceview.text = ""
+        spaceview.textSize = 10f
+        task_layout.addView(spaceview)
     }
 
     fun get_friendscores(username: String, api_key: String){
@@ -91,6 +120,35 @@ class scoreboard : AppCompatActivity() {
             ), contenders[x])
             x++
         }
+    }
+
+    fun delete_friend(friend: String){
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://shappie.net/hpdDelFriend.php?username=$username&friend=$friend"
+        val requestBody = "accesscode=$api_key"
+        val stringReq : StringRequest =
+            object : StringRequest(
+                Method.POST, url,
+                Response.Listener { response ->
+                    val strResp = response.toString()
+                    if(strResp == "no data" || strResp == "no acces"){
+                        Toast.makeText(baseContext, "Please log in!", Toast.LENGTH_LONG).show()
+                    }else if (strResp == "done"){
+                        Toast.makeText(baseContext, "Friend deleted", Toast.LENGTH_LONG).show()
+                        finish()
+                        overridePendingTransition(0, 0)
+                        startActivity(getIntent())
+                        overridePendingTransition(0, 0)
+                    }
+                },
+                Response.ErrorListener { error ->
+                    Toast.makeText(baseContext, "Deleting friend failed", Toast.LENGTH_LONG).show()
+                }){
+                override fun getBody(): ByteArray {
+                    return requestBody.toByteArray(Charset.defaultCharset())
+                }
+            }
+        queue.add(stringReq)
     }
 
     fun get_api_config(){
